@@ -24,6 +24,8 @@ end
 
 # vagrant configurate
 Vagrant.configure(2) do |config|
+  # config boot time
+  config.vm.boot_timeout = 6000
   # select the box
   config.vm.box = 'bento/ubuntu-16.04'
 
@@ -37,6 +39,8 @@ Vagrant.configure(2) do |config|
     vb.memory = options['memory']
     # machine name (for VirtualBox UI)
     vb.name = options['machine_name']
+    #gui
+    vb.gui = true
   end
 
   # machine name (for vagrant console)
