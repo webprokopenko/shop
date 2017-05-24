@@ -3,6 +3,7 @@ namespace frontend\controllers;
 
 use Yii;
 use yii\base\InvalidParamException;
+use common\services\AuthService;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
@@ -21,6 +22,7 @@ use frontend\services\contact\ContactService;
  */
 class SiteController extends Controller
 {
+    private $authService;
     private $passwordResetService;
     private $contactService;
     private $signupService;
@@ -28,12 +30,14 @@ class SiteController extends Controller
     public function __construct(
         $id,
         $module,
+        AuthService $authService,
         SignupService $signupService,
         PasswordResetService $passwordResetService,
         ContactService $contactService,
         $config = [])
     {
         parent::__construct($id, $module, $config);
+        $this->authService = $authService;
         $this->signupService = $signupService;
         $this->passwordResetService = $passwordResetService;
         $this->contactService = $contactService;
@@ -100,16 +104,19 @@ class SiteController extends Controller
      */
     public function actionLogin()
     {
-        if (!Yii::$app->user->isGuest) {
-            return $this->goHome();
+        $form = new LoginForm();
+        if ($form->load(Yii::$app->request->post()) && $form->validate()) {
+            try {
+                $user = $this->authService->auth($form);
+                Yii::$app->user->login($user, $form->rememberMe ? 3600 * 24 * 30 : 0);
+                return $this->goBack();
+            } catch (\DomainException $e) {
+                Yii::$app->session->setFlash('error', $e->getMessage());
+            }
         }
 
-        $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
-        }
         return $this->render('login', [
-            'model' => $model,
+            'model' => $form,
         ]);
     }
 
@@ -183,7 +190,7 @@ class SiteController extends Controller
             'model' => $form,
         ]);
     }
-    
+
     public function actionConfirm($token)
     {
         try {
