@@ -9,12 +9,7 @@ use Yii;
 
 class PasswordResetService
 {
-    private $supportEmail;
 
-    public function __construct($supportEmail)
-    {
-        $this->supportEmail = $supportEmail;
-    }
 
     public function request(PasswordResetRequestForm $form): void
     {
