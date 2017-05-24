@@ -3,7 +3,7 @@
 namespace shop\services\auth;
 
 
-use shop\entities\User;
+use shop\entities\user\User;
 use shop\forms\auth\SignupForm;
 use shop\repositories\UserRepository;
 use yii\mail\MailerInterface;

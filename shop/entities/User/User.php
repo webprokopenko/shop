@@ -1,6 +1,7 @@
 <?php
-namespace shop\entities;
+namespace shop\entities\user;
 
+use shop\entities\InstantiateTrait;
 use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
