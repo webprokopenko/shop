@@ -1,17 +1,18 @@
 <?php
 
-namespace frontend\services\auth;
+namespace shop\services\auth;
 
-use common\entities\User;
-use frontend\forms\SignupForm;
-use common\repositories\UserRepository;
+
+use shop\entities\User;
+use shop\forms\auth\SignupForm;
+use shop\repositories\UserRepository;
 use yii\mail\MailerInterface;
 
 class SignupService
 {
     private $mailer;
 
-    public function __construct(serRepository $users, MailerInterface $mailer)
+    public function __construct(UserRepository $users, MailerInterface $mailer)
     {
         $this->mailer = $mailer;
         $this->users = $users;

@@ -1,9 +1,9 @@
 <?php
 
-namespace frontend\tests\unit\forms;
+namespace shop\tests\unit\forms;
 
 use common\fixtures\UserFixture;
-use frontend\forms\ResetPasswordForm;
+use shop\forms\auth\ResetPasswordForm;
 
 class ResetPasswordFormTest extends \Codeception\Test\Unit
 {
