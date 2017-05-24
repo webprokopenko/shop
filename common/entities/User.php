@@ -25,19 +25,28 @@ class User extends ActiveRecord implements IdentityInterface
 {
     use InstantiateTrait;
 
-    const STATUS_DELETED = 0;
+    const STATUS_WAIT = 0;
     const STATUS_ACTIVE = 10;
 
-    public static function signup(string $username, string $email, string $password): self
+    public static function requestSignup(string $username, string $email, string $password): self
     {
         $user = new static();
         $user->username = $username;
         $user->email = $email;
         $user->setPassword($password);
         $user->created_at = time();
-        $user->status = self::STATUS_ACTIVE;
+        $user->status = self::STATUS_WAIT;
+        $user->generateEmailConfirmToken();
         $user->generateAuthKey();
         return $user;
+    }
+    public function confirmSignup(): void
+    {
+        if (!$this->isWait()) {
+            throw new \DomainException('User is already active.');
+        }
+        $this->status = self::STATUS_ACTIVE;
+        $this->removeEmailConfirmToken();
     }
     public function requestPasswordReset(): void
     {
@@ -54,6 +63,11 @@ class User extends ActiveRecord implements IdentityInterface
         }
         $this->setPassword($password);
         $this->password_reset_token = null;
+    }
+
+    public function isWait(): bool
+    {
+        return $this->status === self::STATUS_WAIT;
     }
 
     public function isActive(): bool
@@ -208,16 +222,16 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * Generates new password reset token
      */
-    public function generatePasswordResetToken()
+    private function generateEmailConfirmToken()
     {
-        $this->password_reset_token = Yii::$app->security->generateRandomString() . '_' . time();
+        $this->email_confirm_token = Yii::$app->security->generateRandomString();
     }
 
     /**
-     * Removes password reset token
+     * Removes email confirm token
      */
-    public function removePasswordResetToken()
+    private function removeEmailConfirmToken()
     {
-        $this->password_reset_token = null;
+        $this->email_confirm_token = null;
     }
 }
