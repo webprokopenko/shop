@@ -1,6 +1,5 @@
 <?php
 return [
-    'urlManager' => 'yii\web\UrlManager',
     'class' => 'yii\web\UrlManager',
     'hostInfo' => $params['frontendHostInfo'],
     'enablePrettyUrl' => true,
