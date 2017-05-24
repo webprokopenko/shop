@@ -1,10 +1,6 @@
 <?php
 namespace shop\entities;
 
-use common\entities\bool;
-use shop\entities\InstantiateTrait;
-use common\entities\string;
-use common\entities\void;
 use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
