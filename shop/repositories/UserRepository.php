@@ -38,11 +38,13 @@ class UserRepository
         return (bool) User::findByPasswordResetToken($token);
     }
 
-    public function save(User $user): void
+    public function save(User $user): User
     {
         if (!$user->save()) {
             throw new \RuntimeException('Saving error.');
-        }
+        }else
+            return $user;
+
     }
 
     private function getBy(array $condition): User
