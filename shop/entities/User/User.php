@@ -42,7 +42,12 @@ class User extends ActiveRecord implements IdentityInterface
         $user->auth_key = Yii::$app->security->generateRandomString();
         return $user;
     }
-
+    public function edit(string $username, string $email)
+    {
+        $this->username = $username;
+        $this->email = $email;
+        $this->updated_at = time();
+    }
     public static function requestSignup(string $username, string $email, string $password): self
     {
         $user = new static();
