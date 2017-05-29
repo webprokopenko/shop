@@ -5,9 +5,10 @@ namespace shop\services\manage\Shop;
 use shop\entities\Meta;
 use shop\entities\Shop\Product\Product;
 use shop\forms\manage\Shop\Product\ProductCreateForm;
-use shop\repositories\BrandRepository;
-use shop\repositories\CategoryRepository;
+use shop\repositories\Shop\BrandRepository;
+use shop\repositories\Shop\CategoryRepository;
 use shop\repositories\Shop\ProductRepository;
+use shop\forms\manage\Shop\Product\CategoriesForm;
 
 class ProductManageService
 {
@@ -45,11 +46,29 @@ class ProductManageService
 
         $product->setPrice($form->price->new, $form->price->old);
 
+        foreach ($form->categories->others as $otherId) {
+            $category = $this->categories->get($otherId);
+            $product->assignCategory($category->id);
+        }
+
         $this->products->save($product);
 
         return $product;
     }
 
+    public function changeCategories($id, CategoriesForm $form): void
+    {
+        $product = $this->products->get($id);
+        $category = $this->categories->get($form->main);
+        $product->changeMainCategory($category->id);
+        $product->revokeCategories();
+        foreach ($form->others as $otherId) {
+            $category = $this->categories->get($otherId);
+            $product->assignCategory($category->id);
+        }
+        $this->products->save($product);
+    }
+    
     public function remove($id): void
     {
         $product = $this->products->get($id);
