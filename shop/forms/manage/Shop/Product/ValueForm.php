@@ -41,7 +41,10 @@ class ValueForm extends Model
             'value' => $this->_characteristic->name,
         ];
     }
-
+    public function variantsList(): array
+    {
+        return $this->_characteristic->variants ? array_combine($this->_characteristic->variants, $this->_characteristic->variants) : [];
+    }
     public function getId(): int
     {
         return $this->_characteristic->id;

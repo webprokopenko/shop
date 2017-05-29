@@ -5,6 +5,7 @@ namespace shop\forms\manage\Shop\Product;
 use shop\entities\Shop\Product\Product;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
+use shop\entities\Shop\Tag;
 
 /**
  * @property array $newNames
@@ -29,9 +30,17 @@ class TagsForm extends Model
             ['textNew', 'string'],
         ];
     }
-
+    public function tagsList(): array
+    {
+        return ArrayHelper::map(Tag::find()->orderBy('name')->asArray()->all(), 'id', 'name');
+    }
     public function getNewNames(): array
     {
         return array_map('trim', preg_split('#\s*,\s*#i', $this->textNew));
+    }
+    public function beforeValidate(): bool
+    {
+        $this->existing = array_filter((array)$this->existing);
+        return parent::beforeValidate();
     }
 }

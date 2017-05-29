@@ -10,6 +10,8 @@ use shop\entities\Shop\Category;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\web\UploadedFile;
+use shop\entities\Shop\Tag;
+use yii\db\Exception;
 
 /**
  * @property integer $id
@@ -279,6 +281,14 @@ class Product extends ActiveRecord
         $this->tagAssignments = [];
     }
 
+    public function getCategories(): ActiveQuery
+    {
+        return $this->hasMany(Category::class, ['id' => 'category_id'])->via('categoryAssignments');
+    }
+    public function getTags(): ActiveQuery
+    {
+        return $this->hasMany(Tag::class, ['id' => 'tag_id'])->via('tagAssignments');
+    }
     // Photos
 
     public function addPhoto(UploadedFile $file): void
@@ -354,6 +364,10 @@ class Product extends ActiveRecord
     {
         return $this->hasOne(Photo::class, ['product_id' => 'id'])->orderBy('sort');
     }
+    public function getRelateds(): ActiveQuery
+    {
+        return $this->hasMany(Product::class, ['id' => 'related_id'])->via('relatedAssignments');
+    }
     // Related products
 
     public function assignRelatedProduct($id): void
@@ -410,7 +424,16 @@ class Product extends ActiveRecord
     {
         return '{{%shop_products}}';
     }
-
+    public function beforeDelete(): bool
+    {
+        if (parent::beforeDelete()) {
+            foreach ($this->photos as $photo) {
+                $photo->delete();
+            }
+            return true;
+        }
+        return false;
+    }
     public function behaviors(): array
     {
         return [

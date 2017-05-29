@@ -6,6 +6,9 @@ use shop\entities\Shop\Characteristic;
 use shop\entities\Shop\Product\Product;
 use shop\forms\CompositeForm;
 use shop\forms\manage\MetaForm;
+use shop\entities\Shop\Brand;
+use yii\helpers\ArrayHelper;
+
 
 /**
  * @property MetaForm $meta
@@ -48,9 +51,13 @@ class ProductEditForm extends CompositeForm
             ['description', 'string'],
         ];
     }
+    public function brandsList(): array
+    {
+        return ArrayHelper::map(Brand::find()->orderBy('name')->asArray()->all(), 'id', 'name');
+    }
 
     protected function internalForms(): array
     {
-        return ['meta', 'tags', 'values'];
+        return ['meta','categories', 'tags', 'values'];
     }
 }

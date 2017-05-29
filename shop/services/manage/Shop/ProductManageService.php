@@ -15,6 +15,7 @@ use shop\repositories\Shop\TagRepository;
 use shop\services\TransactionManager;
 use shop\forms\manage\Shop\Product\ProductEditForm;
 use shop\forms\manage\Shop\Product\ModificationForm;
+use shop\forms\manage\Shop\Product\PriceForm;
 
 class ProductManageService
 {
@@ -137,6 +138,12 @@ class ProductManageService
             }
             $this->products->save($product);
         });
+    }
+    public function changePrice($id, PriceForm $form): void
+    {
+        $product = $this->products->get($id);
+        $product->setPrice($form->new, $form->old);
+        $this->products->save($product);
     }
     public function addModification($id, ModificationForm $form): void
     {
