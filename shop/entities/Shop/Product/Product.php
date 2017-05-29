@@ -24,6 +24,7 @@ use yii\db\ActiveRecord;
  * @property Meta $meta
  * @property Brand $brand
  * @property CategoryAssignment[] $categoryAssignments
+ * @property Value[] $values
  */
 class Product extends ActiveRecord
 {
@@ -49,6 +50,28 @@ class Product extends ActiveRecord
     public function changeMainCategory($categoryId): void
     {
         $this->category_id = $categoryId;
+    }
+    public function setValue($id, $value): void
+    {
+        $values = $this->values;
+        foreach ($values as $val) {
+            if ($val->isForCharacteristic($id)) {
+                return;
+            }
+        }
+        $values[] = Value::create($id, $value);
+        $this->values = $values;
+    }
+
+    public function getValue($id): Value
+    {
+        $values = $this->values;
+        foreach ($values as $val) {
+            if ($val->isForCharacteristic($id)) {
+                return $val;
+            }
+        }
+        return Value::blank($id);
     }
 
     public function assignCategory($id): void
@@ -86,6 +109,11 @@ class Product extends ActiveRecord
         return $this->hasOne(Brand::class, ['id' => 'brand_id']);
     }
 
+    public function getValues(): ActiveQuery
+    {
+        return $this->hasOne(Value::class, ['product_id' => 'id']);
+    }
+
     public function getCategory(): ActiveQuery
     {
         return $this->hasOne(Category::class, ['id' => 'category_id']);
@@ -109,7 +137,7 @@ class Product extends ActiveRecord
             MetaBehavior::className(),
             [
                 'class' => SaveRelationsBehavior::className(),
-                'relations' => ['categoryAssignments'],
+                'relations' => ['categoryAssignments', 'values'],
             ],
         ];
     }

@@ -50,7 +50,9 @@ class ProductManageService
             $category = $this->categories->get($otherId);
             $product->assignCategory($category->id);
         }
-
+        foreach ($form->values as $value) {
+            $product->setValue($value->id, $value->value);
+        }
         $this->products->save($product);
 
         return $product;
@@ -68,7 +70,7 @@ class ProductManageService
         }
         $this->products->save($product);
     }
-    
+
     public function remove($id): void
     {
         $product = $this->products->get($id);
