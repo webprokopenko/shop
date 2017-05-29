@@ -6,6 +6,7 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 
+
 ?>
 <?php $this->beginContent('@frontend/views/layouts/main.php') ?>
 
