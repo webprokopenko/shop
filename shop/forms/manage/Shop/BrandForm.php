@@ -3,13 +3,13 @@
 namespace shop\forms\manage\Shop;
 
 use shop\entities\Shop\Brand;
+use shop\forms\CompositeForm;
 use shop\forms\manage\MetaForm;
-use yii\base\Model;
 
 /**
  * @property MetaForm $meta;
  */
-class BrandForm extends Model
+class BrandForm extends CompositeForm
 {
     public $name;
     public $slug;
@@ -27,21 +27,11 @@ class BrandForm extends Model
         }
         parent::__construct($config);
     }
-
-    public function load($data, $formName = null): bool
+    
+    public function internalForms(): array
     {
-        $self = parent::load($data, $formName);
-        $meta = $this->_meta->load($data, $formName ? null : 'meta');
-        return $self && $meta;
+        return ['meta'];
     }
-
-    public function validate($attributeNames = null, $clearErrors = true): bool
-    {
-        $self = parent::validate($attributeNames, $clearErrors);
-        $meta = $this->_meta->validate($attributeNames, $clearErrors);
-        return $self && $meta;
-    }
-
     public function rules(): array
     {
         return [
