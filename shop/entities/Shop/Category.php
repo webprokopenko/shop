@@ -18,7 +18,8 @@ use yii\db\ActiveRecord;
  * @property integer $rgt
  * @property integer $depth
  * @property Meta $meta
- *
+ * @property Category $prev
+ * @property Category $next
  * @property Category $parent
  * @mixin NestedSetsBehavior
  */
