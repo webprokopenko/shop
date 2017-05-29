@@ -9,6 +9,7 @@ use shop\entities\Shop\Brand;
 use shop\entities\Shop\Category;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
+use yii\web\UploadedFile;
 
 /**
  * @property integer $id
@@ -25,6 +26,7 @@ use yii\db\ActiveRecord;
  * @property Brand $brand
  * @property CategoryAssignment[] $categoryAssignments
  * @property Value[] $values
+ * @property Photo[] $photos
  */
 class Product extends ActiveRecord
 {
@@ -123,6 +125,72 @@ class Product extends ActiveRecord
     {
         return $this->hasOne(CategoryAssignment::class, ['product_id' => 'id']);
     }
+    // Photos
+
+    public function addPhoto(UploadedFile $file): void
+    {
+        $photos = $this->photos;
+        $photos[] = Photo::create($file);
+        $this->setPhotos($photos);
+    }
+
+    public function removePhoto($id): void
+    {
+        $photos = $this->photos;
+        foreach ($photos as $i => $photo) {
+            if ($photo->isIdEqualTo($id)) {
+                unset($photos[$i]);
+                $this->setPhotos($photos);
+                return;
+            }
+        }
+        throw new \DomainException('Photo is not found.');
+    }
+
+    public function removePhotos(): void
+    {
+        $this->setPhotos([]);
+    }
+
+    public function movePhotoUp($id): void
+    {
+        $photos = $this->photos;
+        foreach ($photos as $i => $photo) {
+            if ($photo->isIdEqualTo($id) && $prev = $photos[$i - 1] ?? null) {
+                $photos[$i] = $prev;
+                $photos[$i - 1] = $photo;
+                $this->setPhotos($photos);
+                return;
+            }
+        }
+        throw new \DomainException('Photo is not found.');
+    }
+
+    public function movePhotoDown($id): void
+    {
+        $photos = $this->photos;
+        foreach ($photos as $i => $photo) {
+            if ($photo->isIdEqualTo($id) && $next = $photos[$i + 1] ?? null) {
+                $photos[$i] = $next;
+                $photos[$i + 1] = $photo;
+                $this->setPhotos($photos);
+                return;
+            }
+        }
+        throw new \DomainException('Photo is not found.');
+    }
+
+    private function setPhotos(array $photos): void
+    {
+        foreach ($photos as $i => $photo) {
+            $photo->setSort($i);
+        }
+        $this->photos = $photos;
+    }
+    public function getPhotos(): ActiveQuery
+    {
+        return $this->hasOne(Photo::class, ['product_id' => 'id'])->orderBy('sort');
+    }
 
     ##########################
 
@@ -137,7 +205,7 @@ class Product extends ActiveRecord
             MetaBehavior::className(),
             [
                 'class' => SaveRelationsBehavior::className(),
-                'relations' => ['categoryAssignments', 'values'],
+                'relations' => ['categoryAssignments', 'values', 'photos'],
             ],
         ];
     }
