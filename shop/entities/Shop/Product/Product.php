@@ -28,6 +28,7 @@ use yii\web\UploadedFile;
  * @property Value[] $values
  * @property Photo[] $photos
  * @property TagAssignment[] $tagAssignments
+ * @property RelatedAssignment[] $relatedAssignments
  */
 class Product extends ActiveRecord
 {
@@ -224,7 +225,37 @@ class Product extends ActiveRecord
     {
         return $this->hasOne(Photo::class, ['product_id' => 'id'])->orderBy('sort');
     }
+    // Related products
 
+    public function assignRelatedProduct($id): void
+    {
+        $assignments = $this->relatedAssignments;
+        foreach ($assignments as $assignment) {
+            if ($assignment->isForProduct($id)) {
+                return;
+            }
+        }
+        $assignments[] = CategoryAssignment::create($id);
+        $this->relatedAssignments = $assignments;
+    }
+
+    public function revokeRelatedProduct($id): void
+    {
+        $assignments = $this->relatedAssignments;
+        foreach ($assignments as $i => $assignment) {
+            if ($assignment->isForProduct($id)) {
+                unset($assignments[$i]);
+                $this->relatedAssignments = $assignments;
+                return;
+            }
+        }
+        throw new \DomainException('Assignment is not found.');
+    }
+
+    public function getRelatedAssignments(): ActiveQuery
+    {
+        return $this->hasOne(RelatedAssignment::class, ['product_id' => 'id']);
+    }
     ##########################
 
     public static function tableName(): string
@@ -238,7 +269,7 @@ class Product extends ActiveRecord
             MetaBehavior::className(),
             [
                 'class' => SaveRelationsBehavior::className(),
-                'relations' => ['categoryAssignments', 'values', 'photos', 'tagAssignments'],
+                'relations' => ['categoryAssignments', 'values', 'photos', 'tagAssignments', 'relatedAssignments'],
             ],
         ];
     }
