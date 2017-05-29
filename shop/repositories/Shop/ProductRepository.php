@@ -22,6 +22,11 @@ class ProductRepository
         }
     }
 
+    public function existsByBrand($id): bool
+    {
+        return Product::find()->andWhere(['brand_id' => $id])->exists();
+    }
+
     public function remove(Product $brand): void
     {
         if (!$brand->delete()) {
