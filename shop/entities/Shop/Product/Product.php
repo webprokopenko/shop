@@ -29,6 +29,7 @@ use yii\web\UploadedFile;
  * @property Photo[] $photos
  * @property TagAssignment[] $tagAssignments
  * @property RelatedAssignment[] $relatedAssignments
+ * @property Modification[] $modifications
  */
 class Product extends ActiveRecord
 {
@@ -126,6 +127,55 @@ class Product extends ActiveRecord
     public function getCategoryAssignments(): ActiveQuery
     {
         return $this->hasOne(CategoryAssignment::class, ['product_id' => 'id']);
+    }
+    // Modification
+
+    public function getModification($id): Modification
+    {
+        foreach ($this->modifications as $modification) {
+            if ($modification->isIdEqualTo($id)) {
+                return $modification;
+            }
+        }
+        throw new \DomainException('Modification is not found.');
+    }
+
+    public function addModification($code, $name, $price): void
+    {
+        $modifications = $this->modifications;
+        foreach ($modifications as $modification) {
+            if ($modification->isCodeEqualTo($code)) {
+                throw new \DomainException('Modification already exists.');
+            }
+        }
+        $modifications[] = Modification::create($code, $name, $price);
+        $this->modifications = $modifications;
+    }
+
+    public function editModification($id, $code, $name, $price): void
+    {
+        $modifications = $this->modifications;
+        foreach ($modifications as $i => $modification) {
+            if ($modification->isIdEqualTo($id)) {
+                $modification->edit($code, $name, $price);
+                $this->modifications = $modifications;
+                return;
+            }
+        }
+        throw new \DomainException('Modification is not found.');
+    }
+
+    public function removeModification($id): void
+    {
+        $modifications = $this->modifications;
+        foreach ($modifications as $i => $modification) {
+            if ($modification->isIdEqualTo($id)) {
+                unset($modifications[$i]);
+                $this->modifications = $modifications;
+                return;
+            }
+        }
+        throw new \DomainException('Modification is not found.');
     }
     // Tags
 
@@ -238,6 +288,10 @@ class Product extends ActiveRecord
         $assignments[] = CategoryAssignment::create($id);
         $this->relatedAssignments = $assignments;
     }
+    public function getModifications(): ActiveQuery
+    {
+        return $this->hasOne(Modification::class, ['product_id' => 'id']);
+    }
 
     public function revokeRelatedProduct($id): void
     {
@@ -276,7 +330,7 @@ class Product extends ActiveRecord
             MetaBehavior::className(),
             [
                 'class' => SaveRelationsBehavior::className(),
-                'relations' => ['categoryAssignments', 'values', 'photos', 'tagAssignments', 'relatedAssignments'],
+                'relations' => ['categoryAssignments', 'values', 'photos', 'tagAssignments', 'relatedAssignments', 'modifications'],
             ],
         ];
     }

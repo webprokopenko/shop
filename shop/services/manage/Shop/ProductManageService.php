@@ -14,6 +14,7 @@ use shop\entities\Shop\Tag;
 use shop\repositories\Shop\TagRepository;
 use shop\services\TransactionManager;
 use shop\forms\manage\Shop\Product\ProductEditForm;
+use shop\forms\manage\Shop\Product\ModificationForm;
 
 class ProductManageService
 {
@@ -139,7 +140,37 @@ class ProductManageService
             $this->products->save($product);
         });
     }
-    
+    public function addModification($id, ModificationForm $form): void
+    {
+        $product = $this->products->get($id);
+        $product->addModification(
+            $form->code,
+            $form->name,
+            $form->price
+        );
+        $this->products->save($product);
+    }
+
+    public function editModification($id, $modificationId, ModificationForm $form): void
+    {
+        $product = $this->products->get($id);
+        $product->editModification(
+            $modificationId,
+            $form->code,
+            $form->name,
+            $form->price
+        );
+        $this->products->save($product);
+    }
+
+    public function removeModification($id, $modificationId): void
+    {
+        $product = $this->products->get($id);
+        $product->removeModification($modificationId);
+        $this->products->save($product);
+    }
+
+
     public function addPhotos($id, PhotosForm $form): void
     {
         $product = $this->products->get($id);
