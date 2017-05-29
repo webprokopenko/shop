@@ -27,6 +27,7 @@ use yii\web\UploadedFile;
  * @property CategoryAssignment[] $categoryAssignments
  * @property Value[] $values
  * @property Photo[] $photos
+ * @property TagAssignment[] $tagAssignments
  */
 class Product extends ActiveRecord
 {
@@ -125,6 +126,38 @@ class Product extends ActiveRecord
     {
         return $this->hasOne(CategoryAssignment::class, ['product_id' => 'id']);
     }
+    // Tags
+
+    public function assignTag($id): void
+    {
+        $assignments = $this->tagAssignments;
+        foreach ($assignments as $assignment) {
+            if ($assignment->isForTag($id)) {
+                return;
+            }
+        }
+        $assignments[] = CategoryAssignment::create($id);
+        $this->tagAssignments = $assignments;
+    }
+
+    public function revokeTag($id): void
+    {
+        $assignments = $this->tagAssignments;
+        foreach ($assignments as $i => $assignment) {
+            if ($assignment->isForTag($id)) {
+                unset($assignments[$i]);
+                $this->tagAssignments = $assignments;
+                return;
+            }
+        }
+        throw new \DomainException('Assignment is not found.');
+    }
+
+    public function revokeTags(): void
+    {
+        $this->tagAssignments = [];
+    }
+
     // Photos
 
     public function addPhoto(UploadedFile $file): void
@@ -205,7 +238,7 @@ class Product extends ActiveRecord
             MetaBehavior::className(),
             [
                 'class' => SaveRelationsBehavior::className(),
-                'relations' => ['categoryAssignments', 'values', 'photos'],
+                'relations' => ['categoryAssignments', 'values', 'photos', 'tagAssignments'],
             ],
         ];
     }
