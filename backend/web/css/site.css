@@ -13,7 +13,10 @@ body {
 .wrap > .container {
     padding: 70px 15px 20px;
 }
-
+div.required label.control-label:after {
+    content: " *";
+    color: red;
+}
 .footer {
     height: 60px;
     background-color: #f5f5f5;
