@@ -9,6 +9,7 @@ use shop\readModels\Shop\TagReadRepository;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use shop\forms\Shop\AddToCartForm;
+use shop\forms\Shop\ReviewForm;
 
 class CatalogController extends Controller
 {
@@ -119,12 +120,14 @@ class CatalogController extends Controller
         }
 
         $cartForm = new AddToCartForm($product);
+        $reviewForm = new ReviewForm();
 
         $this->layout = 'blank';
 
         return $this->render('product', [
             'product' => $product,
             'cartForm' => $cartForm,
+            'reviewForm' => $reviewForm,
         ]);
     }
 }
