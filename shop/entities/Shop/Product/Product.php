@@ -476,7 +476,10 @@ class Product extends ActiveRecord
             ],
         ];
     }
-
+    public function getSeoTile(): string
+    {
+        return $this->meta->title ?: $this->name;
+    }
     public function transactions()
     {
         return [
