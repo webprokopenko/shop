@@ -28,7 +28,10 @@ class ProductReadRepository
         $query->groupBy('p.id');
         return $this->getProvider($query);
     }
-
+    public function getFeatured($limit): array
+    {
+        return Product::find()->with('mainPhoto')->orderBy(['id' => SORT_DESC])->limit($limit)->all();
+    }
     public function getAllByBrand(Brand $brand): DataProviderInterface
     {
         $query = Product::find()->alias('p')->active('p')->with('mainPhoto');
