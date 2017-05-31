@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "e6aa812b558e0d84154e13fe66d6b48c",
+    "content-hash": "c2e4555ac525d88ab696dc2932a6980c",
     "packages": [
         {
             "name": "almasaeed2010/adminlte",
@@ -221,6 +221,37 @@
                 "mask",
                 "plugins"
             ]
+        },
+        {
+            "name": "bower-asset/magnific-popup",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dimsemenov/Magnific-Popup.git",
+                "reference": "6b7a8088783cbce01034414c1fd2d8e1889093ae"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dimsemenov/Magnific-Popup/zipball/6b7a8088783cbce01034414c1fd2d8e1889093ae",
+                "reference": "6b7a8088783cbce01034414c1fd2d8e1889093ae",
+                "shasum": ""
+            },
+            "require": {
+                "bower-asset/jquery": ">=1.8.0"
+            },
+            "type": "bower-asset-library",
+            "extra": {
+                "bower-asset-main": [
+                    "dist/jquery.magnific-popup.js",
+                    "dist/magnific-popup.css"
+                ],
+                "bower-asset-ignore": [
+                    "node_modules/",
+                    "components/",
+                    "website/",
+                    "libs/"
+                ]
+            }
         },
         {
             "name": "bower-asset/owl.carousel",
@@ -575,12 +606,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/kartik-v/bootstrap-fileinput.git",
-                "reference": "397831566408e66173552986258b0d03f2611f13"
+                "reference": "4da2a4211729979f464e7bf1e8f339f61cf9f5e5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kartik-v/bootstrap-fileinput/zipball/397831566408e66173552986258b0d03f2611f13",
-                "reference": "397831566408e66173552986258b0d03f2611f13",
+                "url": "https://api.github.com/repos/kartik-v/bootstrap-fileinput/zipball/4da2a4211729979f464e7bf1e8f339f61cf9f5e5",
+                "reference": "4da2a4211729979f464e7bf1e8f339f61cf9f5e5",
                 "shasum": ""
             },
             "type": "library",
@@ -620,7 +651,7 @@
                 "progress",
                 "upload"
             ],
-            "time": "2017-05-29 02:12:20"
+            "time": "2017-05-31 07:05:02"
         },
         {
             "name": "kartik-v/bootstrap-star-rating",
@@ -2149,12 +2180,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/yiisoft/yii2-framework.git",
-                "reference": "48d51b5ca1204a590d9aaf5b164eafd304d8624a"
+                "reference": "aa5ba3e9cf582bec106ecfe4d45bc3a195bc011d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/48d51b5ca1204a590d9aaf5b164eafd304d8624a",
-                "reference": "48d51b5ca1204a590d9aaf5b164eafd304d8624a",
+                "url": "https://api.github.com/repos/yiisoft/yii2-framework/zipball/aa5ba3e9cf582bec106ecfe4d45bc3a195bc011d",
+                "reference": "aa5ba3e9cf582bec106ecfe4d45bc3a195bc011d",
                 "shasum": ""
             },
             "require": {
@@ -2241,7 +2272,7 @@
                 "framework",
                 "yii2"
             ],
-            "time": "2017-05-28 12:30:36"
+            "time": "2017-05-30 18:27:50"
         },
         {
             "name": "yiisoft/yii2-authclient",
@@ -2768,12 +2799,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/fzaninotto/Faker.git",
-                "reference": "f420a5e0cd5b0cc34720540f43405a9694692a95"
+                "reference": "df4572ed62d6d39ed560caed75b33399dd0d1ba4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fzaninotto/Faker/zipball/f420a5e0cd5b0cc34720540f43405a9694692a95",
-                "reference": "f420a5e0cd5b0cc34720540f43405a9694692a95",
+                "url": "https://api.github.com/repos/fzaninotto/Faker/zipball/df4572ed62d6d39ed560caed75b33399dd0d1ba4",
+                "reference": "df4572ed62d6d39ed560caed75b33399dd0d1ba4",
                 "shasum": ""
             },
             "require": {
@@ -2810,7 +2841,7 @@
                 "faker",
                 "fixtures"
             ],
-            "time": "2017-05-24 08:02:00"
+            "time": "2017-05-31T09:38:54+00:00"
         },
         {
             "name": "guzzlehttp/psr7",
