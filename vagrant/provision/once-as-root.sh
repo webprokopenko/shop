@@ -26,6 +26,14 @@ debconf-set-selections <<< "mysql-community-server mysql-community-server/root-p
 debconf-set-selections <<< "mysql-community-server mysql-community-server/re-root-pass password \"''\""
 echo "Done!"
 
+info "Add Oracle JDK repository"
+add-apt-repository ppa:webupd8team/java -y
+
+info "Add ElasticSearch sources"
+wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
+echo "deb https://artifacts.elastic.co/packages/5.x/apt stable main" | sudo tee -a /etc/apt/sources.list.d/elastic-5.x.list
+
+
 info "Update OS software"
 apt-get update
 apt-get upgrade -y
@@ -35,6 +43,11 @@ apt-get install -y php7.0-curl php7.0-cli php7.0-intl php7.0-mysqlnd php7.0-gd p
 
 info "Install Memcached"
 apt-get install -y php-memcached memcached
+
+info "Install Oracle JDK and ElasticSearch"
+apt-get install -y oracle-java8-installer elasticsearch
+sed -i 's/-Xms2g/-Xms256m/' /etc/elasticsearch/jvm.options
+sed -i 's/-Xmx2g/-Xmx256m/' /etc/elasticsearch/jvm.options
 
 info "Configure MySQL"
 sed -i "s/.*bind-address.*/bind-address = 0.0.0.0/" /etc/mysql/mysql.conf.d/mysqld.cnf
