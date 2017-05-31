@@ -8,6 +8,7 @@ use shop\readModels\Shop\ProductReadRepository;
 use shop\readModels\Shop\TagReadRepository;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use shop\forms\Shop\AddToCartForm;
 
 class CatalogController extends Controller
 {
@@ -116,11 +117,14 @@ class CatalogController extends Controller
         if (!$product = $this->products->find($id)) {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
-        
+
+        $cartForm = new AddToCartForm($product);
+
         $this->layout = 'blank';
 
         return $this->render('product', [
             'product' => $product,
+            'cartForm' => $cartForm,
         ]);
     }
 }
