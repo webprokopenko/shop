@@ -1,10 +1,11 @@
 <?php
-
+use frontend\assets\MagnificPopupAsset;
 /* @var $this yii\web\View */
 
 $this->title = 'HP LP3065';
 $this->params['breadcrumbs'][] = ['label' => 'Catalog', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+MagnificPopupAsset::register($this);
 ?>
 
 <div class="row">
