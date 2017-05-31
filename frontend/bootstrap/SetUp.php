@@ -8,7 +8,7 @@ use yii\widgets\Breadcrumbs;
 
 class SetUp implements BootstrapInterface
 {
-    public function bootstrap($app): void
+    public function bootstrap($app)
     {
         $container = \Yii::$container;
 
