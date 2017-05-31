@@ -31,7 +31,10 @@ class Brand extends ActiveRecord
         $this->slug = $slug;
         $this->meta = $meta;
     }
-
+    public function getSeoTile(): string
+    {
+        return $this->meta->title ?: $this->name;
+    }
     ##########################
 
     public static function tableName(): string
