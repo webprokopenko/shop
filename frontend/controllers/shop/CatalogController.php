@@ -10,6 +10,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use shop\forms\Shop\AddToCartForm;
 use shop\forms\Shop\ReviewForm;
+use shop\forms\Shop\Search\SearchForm;
 
 class CatalogController extends Controller
 {
@@ -107,6 +108,23 @@ class CatalogController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
+    /**
+     * @return mixed
+     */
+    public function actionSearch()
+    {
+        $form = new SearchForm();
+        $form->load(\Yii::$app->request->queryParams);
+        $form->validate();
+
+        $dataProvider = $this->products->search($form);
+
+        return $this->render('search', [
+            'dataProvider' => $dataProvider,
+            'searchForm' => $form,
+        ]);
+    }
+
 
     /**
      * @param $id
