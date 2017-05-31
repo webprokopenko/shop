@@ -22,6 +22,8 @@ foreach ($product->category->parents as $parent) {
         $this->params['breadcrumbs'][] = ['label' => $parent->name, 'url' => ['category', 'id' => $parent->id]];
     }
 }
+$this->params['active_category'] = $product->category;
+
 $this->params['breadcrumbs'][] = $product->name;
 
 MagnificPopupAsset::register($this);
