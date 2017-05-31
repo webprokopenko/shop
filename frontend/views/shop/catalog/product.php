@@ -17,6 +17,11 @@ $this->registerMetaTag(['name' =>'description', 'content' => $product->meta->des
 $this->registerMetaTag(['name' =>'keywords', 'content' => $product->meta->keywords]);
 
 $this->params['breadcrumbs'][] = ['label' => 'Catalog', 'url' => ['index']];
+foreach ($product->category->parents as $parent) {
+    if (!$parent->isRoot()) {
+        $this->params['breadcrumbs'][] = ['label' => $parent->name, 'url' => ['category', 'id' => $parent->id]];
+    }
+}
 $this->params['breadcrumbs'][] = $product->name;
 
 MagnificPopupAsset::register($this);
