@@ -75,6 +75,9 @@ private function getProvider(ActiveQuery $query): ActiveDataProvider
                 ],
             ],
         ],
+        'pagination' => [
+            'pageSizeLimit' => [15, 100],
+        ]
     ]);
 }
 }
